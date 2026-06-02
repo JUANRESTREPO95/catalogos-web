@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#ffffff">
+  <title>Luxora Gems — Administración</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    body { background: #f5f5f5; margin: 0; padding: 0; }
+    .admin-page-wrap { width: 100%; min-height: 100vh; padding: 0; margin: 0; }
+    .admin-page-wrap > header {
+      background: #1a1a2e !important;
+      padding: 14px 24px;
+      display: block;
+      text-align: center;
+    }
+    .admin-page-wrap > header .header-logo {
+      color: white !important;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+    }
+    .login-full {
+      max-width: 400px;
+      margin: 100px auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      padding: 40px;
+      text-align: center;
+    }
+    .login-title { font-size: 1.5rem; margin-bottom: 8px; }
+    .login-subtitle { color: var(--gray-500); margin-bottom: 20px; }
+    .admin-box { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .upload-result { margin-top: 16px; padding: 12px; border-radius: 8px; }
+    .upload-result.success { background: #d4edda; color: #155724; }
+    .upload-result.error { background: #f8d7da; color: #721c24; }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    .destacados-subtabs { display: flex; gap: 10px; margin-bottom: 16px; }
+    .destacados-subtab-content { display: none; }
+    .destacados-subtab-content.active { display: block; }
+    .numeros-intro-wrap { margin-bottom: 24px; }
+    .claves-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .clave-card { background: var(--cream); padding: 20px; border-radius: 12px; }
+    .clave-titulo { font-size: 1.1rem; margin-bottom: 12px; }
+    .clave-desc { font-size: 0.85rem; color: var(--gray-500); margin-bottom: 12px; }
+    
+    /* Layout con sidebar */
+    .admin-layout { 
+      display: flex; 
+      gap: 0; 
+      min-height: calc(100vh - 50px); 
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+    .admin-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: white;
+      border-right: 1px solid var(--gray-200);
+    }
+    .sidebar-header {
+      background: #1a1a2e;
+      padding: 16px;
+      text-align: center;
+    }
+    .sidebar-title {
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      padding: 8px;
+    }
+    .sidebar-item {
+      background: none;
+      border: none;
+      padding: 14px 16px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--gray-600);
+      border-radius: 8px;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+    .sidebar-item:hover { background: var(--gray-50); }
+    .sidebar-item.active {
+      background: #333 !important;
+      color: white !important;
+    }
+    .sidebar-logout {
+      color: #dc3545;
+      border-top: 1px solid var(--gray-200);
+      margin-top: auto;
+    }
+    .sidebar-item.active .sidebar-logout {
+      color: white;
+    }
+    
+    /* Ocultar tabs cuando no está en Catálogo */
+    .content-tabs { display: none; }
+    .content-tabs.visible { display: flex; }
+    .sidebar-logout:hover { background: #fee; }
+    .admin-content {
+      flex: 1;
+      padding: 24px;
+      background: white;
+    }
+    
+    /* Modal Catálogo */
+    .catalogo-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .catalogo-modal.open { display: flex; }
+    .catalogo-box {
+      background: white;
+      border-radius: 16px;
+      width: 95vw;
+      max-width: 1100px;
+      max-height: 90vh;
+      overflow: auto;
+      padding: 24px;
+    }
+    .catalogo-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border-bottom: 1.5px solid var(--gray-200);
+      flex-wrap: wrap;
+    }
+    .catalogo-tab {
+      background: none;
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .catalogo-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -1.5px; left: 0; right: 0;
+      height: 1.5px;
+      background: var(--black);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+    .catalogo-tab.active { color: var(--primary); }
+    .catalogo-tab.active::after { background: var(--primary); transform: scaleX(1); }
+    .catalogo-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray-400);
+    }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    
+    /* Agotados */
+    .agotados-cat-btn {
+      padding: 12px 24px;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: 'Jost', sans-serif;
+      transition: all 0.2s;
+      color: var(--gray-600);
+    }
+    .agotados-cat-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .agotados-cat-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
+    .agotados-img-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+    .agotados-img-card:hover { transform: translateY(-2px); }
+    .agotados-img-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+    .agotados-img-card .agotados-img-name {
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      color: var(--gray-500);
+      text-align: center;
+      word-break: break-all;
+    }
+    .content-header { margin-bottom: 20px; }
+    .content-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border-bottom: 1.5px solid var(--gray-200);
+      flex-wrap: wrap;
+    }
+    .content-tab {
+      background: none;
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .content-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -1.5px; left: 0; right: 0;
+      height: 1.5px;
+      background: var(--black);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+    .content-tab.active { color: var(--primary); }
+    .content-tab.active::after { background: var(--primary); transform: scaleX(1); }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .admin-sidebar { width: 100%; }
+      .sidebar-nav { flex-direction: row; overflow-x: auto; } 
+      .sidebar-item { white-space: nowrap; }
+    }
+    
+    /* Cartera styles */
+    .cartera-filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .cartera-select {
+      padding: 10px 16px;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: white;
+      cursor: pointer;
+    }
+    .cartera-header {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 900px) {
+      .cartera-header {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 900px) {
+      .cartera-header {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .cartera-header {
+        grid-template-columns: 1fr;
+      }
+    }
+    .cartera-card {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .cartera-label {
+      display: block;
+      color: #aaa;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+    .cartera-value {
+      display: block;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .cartera-table-wrap {
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-page-wrap">
+    <div class="admin-topbar">
+      <span class="admin-topbar-title">LUXORA GEMS</span>
+    </div>
+
+  <!-- LOGIN -->
+  <div id="loginModal" class="is-visible">
+    <div class="login-full">
+      <h2 class="login-title">Panel Admin</h2>
+      <p class="login-subtitle">Ingresa la contraseña para continuar</p>
+      <input type="password" id="loginInput" class="field-input" placeholder="Contraseña" onkeydown="if(event.key==='Enter') verificarLogin()">
+      <div id="loginError" class="field-error"></div>
+      <button class="btn-primary" style="width:100%;margin-top:10px" onclick="verificarLogin()">Entrar</button>
+      <p style="margin-top:16px;font-size:0.85rem;color:var(--gray-500)">
+        <a href="../" style="color:var(--primary)">← Volver al catálogo</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="adminModal" class="is-hidden">
+    <div class="admin-layout">
+      <nav class="admin-sidebar">
+        <div class="sidebar-nav">
+          <button class="sidebar-item" onclick="mostrarCatalogo()"><span>📦</span>Catálogo</button>
+          <button class="sidebar-item" onclick="mostrarAgotados()"><span>📭</span>Agotados</button>
+<button class="sidebar-item" onclick="cargarCartera('luxora_gems')"><span>💰</span>Cartera Lux</button>
+            <button class="sidebar-item" onclick="cargarCartera('aura_global')"><span>💰</span>Cartera Aura</button>
+            <button class="sidebar-item" onclick="cargarCartera('nova_luxe')"><span>💰</span>Cartera Nova</button>
+            <button class="sidebar-item" onclick="cargarCartera('celeste_azure')"><span>💰</span>Cartera Cel</button>
+            <button class="sidebar-item" onclick="cargarCartera('zenith_elite')"><span>💰</span>Cartera Zen</button>
+          <div class="sidebar-spacer"></div>
+          <button class="sidebar-item sidebar-logout" onclick="cerrarSesion()"><span>🚪</span>Salir</button>
+        </div>
+      </nav>
+      <div class="admin-content">
+        
+        <!-- TABS HEADER -->
+        <div class="empresa-header-row">
+          <div id="empresaHeader" class="empresa-header-title">Luxora Gems</div>
+        </div>
+        
+        <div class="content-tabs">
+          <button class="content-tab active" onclick="showSection('tabExcel',this)">Excel</button>
+          <button class="content-tab" onclick="showSection('tabLista',this)">Lista</button>
+          <button class="content-tab" onclick="showSection('tabClaves',this)">🔑 Contraseñas</button>
+          <button class="content-tab" onclick="showSection('tabDestacados',this); cargarTablaDestacados()">⭐ Destacados</button>
+          <button class="content-tab" onclick="showSection('tabNumeros',this); cargarTabNumeros()">📞 Números</button>
+          <button class="content-tab" onclick="showSection('tabManifiestos',this); cargarTablaManifiestos()">📄 Manifiestos</button>
+        </div>
+
+        <div id="tabExcel" class="content-section active">
+        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-icon">📂</div>
+          <strong>Haz clic para seleccionar tu archivo</strong>
+          <p>Excel (.xlsx) — Columnas: Ref | Nombre | Precio</p>
+          <p>Solo se importan productos que tengan imagen en la carpeta.</p>
+          <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="subirArchivo(event)">
+        </div>
+        <div class="upload-result" id="uploadResult"></div>
+      </div>
+
+      <div id="tabLista" class="content-section">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+          <button class="btn-danger" onclick="limpiarSinImagen()">🗑 Eliminar sin imagen</button>
+          <button id="btnLimpiarCache" class="btn-danger" onclick="limpiarCache()" style="margin-left:8px">🔄 Refrescar fotos</button>
+        </div>
+        <input class="field-input" type="text" id="adminSearch" placeholder="Buscar por referencia o nombre..." oninput="filtrarTablaAdmin()" style="width:100%;margin-bottom:14px">
+        <table class="admin-table">
+          <thead><tr><th>Ref</th><th>Nombre</th><th>Precio</th><th>Categoría</th><th>Sub.</th><th>Acciones</th></tr></thead>
+          <tbody id="adminTabla"></tbody>
+        </table>
+      </div>
+
+      <div id="tabClaves" class="content-section">
+        <div class="claves-grid" id="clavesGrid">
+          <div class="clave-card" id="claveCardAdmin">
+            <h3 class="clave-titulo">🔒 Contraseña Admin</h3>
+            <p class="clave-desc">Acceso al panel de administración</p>
+            <input type="password" id="claveAdminNueva" class="field-input" placeholder="Nueva contraseña">
+            <input type="password" id="claveAdminConfirma" class="field-input" placeholder="Confirmar contraseña">
+            <div id="claveAdminMsg" class="field-error"></div>
+            <button class="btn-primary btn-block" onclick="cambiarClave('admin','claveAdminNueva','claveAdminConfirma','claveAdminMsg')">Cambiar contraseña admin</button>
+          </div>
+          <div class="clave-card" id="claveCardVendedor">
+            <h3 class="clave-titulo">🏷 Contraseña Vendedor</h3>
+            <p class="clave-desc">Acceso para descargar catálogo PDF</p>
+            <input type="password" id="claveVendedorNueva" class="field-input" placeholder="Nueva contraseña">
+            <input type="password" id="claveVendedorConfirma" class="field-input" placeholder="Confirmar contraseña">
+            <div id="claveVendedorMsg" class="field-error"></div>
+            <button class="btn-primary btn-block" onclick="cambiarClave('vendedor','claveVendedorNueva','claveVendedorConfirma','claveVendedorMsg')">Cambiar contraseña vendedor</button>
+          </div>
+          <div class="clave-card" id="claveCardUsuario">
+            <h3 class="clave-titulo">👤 Contraseña Usuario</h3>
+            <p class="clave-desc">Acceso limitado al catálogo</p>
+            <input type="password" id="claveUsuarioNueva" class="field-input" placeholder="Nueva contraseña">
+            <input type="password" id="claveUsuarioConfirma" class="field-input" placeholder="Confirmar contraseña">
+            <div id="claveUsuarioMsg" class="field-error"></div>
+            <button class="btn-primary btn-block" onclick="cambiarClave('usuario','claveUsuarioNueva','claveUsuarioConfirma','claveUsuarioMsg')">Cambiar contraseña usuario</button>
+          </div>
+          <div class="clave-card" id="card2FA">
+            <h3 class="clave-titulo">🔐 Autenticación 2FA</h3>
+            <p class="clave-desc">Autenticación de dos factores con Google Authenticator</p>
+            <div id="2faStatus" class="twofa-status"></div>
+            <button class="btn-primary btn-block" onclick="configurar2FA()">Configurar 2FA</button>
+            <div id="2faMsg" class="field-error twofa-msg"></div>
+          </div>
+          
+          <!-- Modal 2FA -->
+          <div id="2faModal" class="twofa-modal">
+            <div class="twofa-modal-card">
+              <h3 class="twofa-title">Configura 2FA</h3>
+              <p class="twofa-subtitle">Escanea con Google Authenticator</p>
+              <img id="2faQR" class="twofa-qr">
+              <p class="twofa-help">O ingresa este código manualmente:</p>
+              <code id="2faSecret" class="twofa-secret"></code>
+              <input type="text" id="2faCodeInput" placeholder="Código de 6 dígitos" maxlength="6" class="twofa-input">
+              <br>
+              <button class="btn-primary twofa-btn" onclick="verificar2FA()">Verificar</button>
+              <button class="btn-outline twofa-btn twofa-btn-cancel" onclick="cerrar2FA()">Cancelar</button>
+              <div id="2faResult" class="twofa-result"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tabDestacados" class="content-section">
+        <div class="destacados-subtabs">
+          <button class="destacados-subtab active" onclick="switchSubtab('subtabMasVendidos', this); cargarTablaDestacados()">⭐ Más vendidos</button>
+          <button class="destacados-subtab" onclick="switchSubtab('subtabLoNuevo', this); cargarTablaLoNuevo()">🏷️ Lo Nuevo</button>
+        </div>
+        <div id="subtabMasVendidos" class="destacados-subtab-content active">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <p style="font-size:0.85rem;color:var(--gray-400);margin:0">Marca o sube un Excel con los <strong>más vendidos</strong>.</p>
+              <p style="font-size:0.78rem;color:var(--gray-400);margin-top:4px">Formato del Excel: <strong>A = Referencia</strong>. Fila 1 = encabezado (se ignora). ⚠️ Reemplaza la lista completa.</p>
+            </div>
+            <div>
+              <button id="btnImportarDestacados" class="btn-danger" onclick="document.getElementById('fileDestacados').click()">📂 Subir Excel</button>
+              <input type="file" id="fileDestacados" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarExcelDestacados(event)">
+            </div>
+          </div>
+          <input class="field-input" type="text" id="destacadosSearch" placeholder="Buscar por referencia o nombre..." oninput="filtrarTablaDestacados()" style="width:100%;margin-bottom:14px">
+          <table class="admin-table">
+            <thead><tr><th>⭐</th><th>Ref</th><th>Nombre</th><th>Categoría</th></tr></thead>
+            <tbody id="destacadosTabla"></tbody>
+          </table>
+        </div>
+        <div id="subtabLoNuevo" class="destacados-subtab-content">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <p style="font-size:0.85rem;color:var(--gray-400);margin:0">Marca o sube un Excel con <strong>lo nuevo</strong>.</p>
+              <p style="font-size:0.78rem;color:var(--gray-400);margin-top:4px">Formato del Excel: <strong>A = Referencia</strong>. Fila 1 = encabezado (se ignora). ⚠️ Reemplaza la lista completa.</p>
+            </div>
+            <div>
+              <button id="btnImportarNuevos" class="btn-danger" onclick="document.getElementById('fileNuevos').click()">📂 Subir Excel</button>
+              <input type="file" id="fileNuevos" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarExcelNuevos(event)">
+            </div>
+          </div>
+          <input class="field-input" type="text" id="nuevosSearch" placeholder="Buscar por referencia o nombre..." oninput="filtrarTablaLoNuevo()" style="width:100%;margin-bottom:14px">
+          <table class="admin-table">
+            <thead><tr><th>🏷️</th><th>Ref</th><th>Nombre</th><th>Categoría</th></tr></thead>
+            <tbody id="nuevosTabla"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tabNumeros" class="content-section">
+        <div class="numeros-intro-wrap">
+          <h3 class="clave-titulo">📝 Introducción</h3>
+          <textarea id="numerosIntro" class="field-input" rows="3" placeholder="Escribe una introducción para el modal de contacto..." style="width:100%;resize:vertical;font-family:inherit"></textarea>
+          <button class="btn-primary" style="margin-top:8px" onclick="guardarIntroContacto()">Guardar introducción</button>
+          <div id="introMsg" class="field-error" style="margin-top:6px"></div>
+        </div>
+        <div style="margin-top:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <h3 class="clave-titulo" style="margin:0">📞 Números de contacto</h3>
+            <button class="btn-primary" onclick="mostrarFormContacto()">+ Agregar</button>
+          </div>
+          <div id="formContacto" style="display:none;background:#f9f9f9;border:1px solid var(--gray-200);border-radius:6px;padding:16px;margin-bottom:14px">
+            <input type="hidden" id="contactoEditIdx" value="-1">
+            <input class="field-input" type="text" id="contactoDesc" placeholder="Descripción (ej: Ventas, Soporte...)" style="width:100%;margin-bottom:8px">
+            <input class="field-input" type="tel" id="contactoTel" placeholder="Número (ej: 3001234567)" style="width:100%;margin-bottom:8px">
+            <div style="display:flex;gap:8px">
+              <button class="btn-primary" style="flex:1" onclick="guardarContacto()">Guardar</button>
+              <button class="btn-outline" style="flex:1" onclick="cancelarFormContacto()">Cancelar</button>
+            </div>
+            <div id="contactoFormMsg" class="field-error" style="margin-top:6px"></div>
+          </div>
+          <table class="admin-table">
+            <thead><tr><th>Descripción</th><th>Teléfono</th><th>Acciones</th></tr></thead>
+            <tbody id="numerosTabla"></tbody>
+          </table>
+        </div>
+      </div>
+
+        <div id="tabManifiestos" class="content-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div>
+            <p style="font-size:0.85rem;color:var(--gray-400);margin:0">Sube un Excel con encabezado: <strong>A = Referencia</strong> &nbsp;|&nbsp; <strong>B = Manifiesto</strong>.</p>
+            <p style="font-size:0.78rem;color:var(--gray-400);margin-top:4px">Solo se guardan referencias que existan en el catálogo. Sin duplicados.</p>
+            <p style="font-size:0.78rem;color:var(--gray-400);margin-top:4px">⚠️ La columna B debe incluir la extensión <strong>.pdf</strong> (ej: <em>manifiesto_ABC123.pdf</em>). Las referencias nuevas se anexan; si ya existían, se actualizan.</p>
+          </div>
+          <button id="btnImportarManifiestos" class="btn-danger" onclick="document.getElementById('fileManifiestos').click()">📂 Subir Excel</button>
+          <input type="file" id="fileManifiestos" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarExcelManifiestos(event)">
+        </div>
+        <div id="manifestosMsg" class="field-error" style="margin-bottom:10px"></div>
+        <input class="field-input" type="text" id="manifestosSearch" placeholder="Buscar por referencia o manifiesto..." oninput="filtrarTablaManifiestos()" style="width:100%;margin-bottom:14px">
+        <table class="admin-table">
+          <thead><tr><th>Referencia</th><th>Manifiesto</th></tr></thead>
+          <tbody id="manifestosTabla"></tbody>
+        </table>
+      </div>
+
+      <!-- AGOTADOS -->
+      <div id="tabAgotados" class="content-section">
+        <div class="content-header">
+          <h2 style="margin:0">📭 Productos Agotados</h2>
+          <p style="color:var(--gray-500);margin-top:4px">Imágenes de productos que han sido eliminados del catálogo.</p>
+        </div>
+        <div id="agotadosCategorias" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px"></div>
+        <div id="agotadosHeader" style="display:none;margin-bottom:16px">
+          <h3 id="agotadosTitulo" style="margin:0"></h3>
+        </div>
+        <div id="agotadosGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px"></div>
+        <div id="agotadosVacio" style="display:none;text-align:center;padding:40px;color:var(--gray-400)">
+          <p style="font-size:1.2rem">No hay imágenes en esta categoría</p>
+        </div>
+      </div>
+
+      <!-- MODAL AGOTADOS -->
+      <div id="agotadosModal" class="catalogo-modal" onclick="if(event.target===this)cerrarAgotadosModal()">
+        <div class="catalogo-box" style="max-width:800px;text-align:center;position:relative">
+          <span class="catalogo-close" onclick="cerrarAgotadosModal()">&times;</span>
+          <img id="agotadosModalImg" src="" style="max-width:100%;max-height:80vh;display:block;margin:0 auto;border-radius:8px">
+        </div>
+      </div>
+
+      <!-- CARTERA -->
+      <div id="tabCartera" class="content-section">
+        <div class="cartera-filters cartera-filters-inline">
+          <select id="carteraAnio" class="cartera-select cartera-filter-item" onchange="filtrarCartera()">
+            <option value="">Todos los años</option>
+          </select>
+          <select id="carteraMes" class="cartera-select cartera-filter-item" onchange="filtrarCartera()">
+            <option value="">Todos los meses</option>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+          <select id="carteraVendedor" class="cartera-select cartera-filter-item" onchange="filtrarCartera()">
+            <option value="">Todos los vendedores</option>
+          </select>
+          <button class="btn-outline cartera-filter-btn" onclick="limpiarFiltrosCartera()">🗑 Limpiar</button>
+          <button class="btn-outline cartera-filter-btn" onclick="recargarCartera()">🔄 Refresh</button>
+        </div>
+        <div class="cartera-header">
+          <div class="cartera-card">
+            <span class="cartera-label" id="labelVentasTotal">Total Cartera</span>
+            <span class="cartera-value" id="carteraTotal">Cargando...</span>
+            <span class="cartera-label" id="labelCostoTotal" style="display:none;">Costo Total</span>
+            <span class="cartera-value" id="carteraCostoTotal" style="display:none;"></span>
+          </div>
+          <div class="cartera-card">
+            <span class="cartera-label">Últimos 6 meses</span>
+            <span class="cartera-value" id="carteraUltimos6">Cargando...</span>
+          </div>
+          <div class="cartera-card" id="cardFiltro">
+            <span class="cartera-label" id="labelDescuento">Más de 6 meses</span>
+            <span class="cartera-value" id="carteraMas6">Cargando...</span>
+            <span class="cartera-label" id="labelMonto" style="margin-top:8px;display:none;">Monto</span>
+            <span class="cartera-value" id="carteraMonto" style="display:none;"></span>
+          </div>
+        </div>
+
+        <!-- Gráficas: visibles cuando NO hay vendedor seleccionado -->
+        <div id="carteraCharts" class="cartera-charts-wrap" style="display:none;">
+          <div class="cartera-chart-card">
+            <div class="cartera-chart-title">Saldo por Vendedor</div>
+            <div id="chartVendedor" class="cartera-chart-scroll"></div>
+          </div>
+        </div>
+
+        <div class="cartera-table-wrap" id="carteraTableWrap" style="display:none">
+          <table class="admin-table" id="carteraTable">
+            <thead>
+              <tr>
+                <th class="cartera-col-fecha">Fecha</th>
+                <th class="cartera-col-factura">Factura</th>
+                <th class="cartera-col-vendedor">Vendedor</th>
+                <th class="cartera-col-ciudad">Ciudad</th>
+                <th class="cartera-col-monto">Monto</th>
+                <th class="cartera-col-cliente">Cliente</th>
+                <th class="cartera-col-dias">Días</th>
+                <th class="cartera-col-saldo">Saldo</th>
+              </tr>
+            </thead>
+            <tbody id="carteraTabla"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <script src="../app.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

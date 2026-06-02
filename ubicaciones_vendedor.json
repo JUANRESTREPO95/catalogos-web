@@ -1,0 +1,162 @@
+[
+  {
+    "fecha": "2026-05-26T15:12:26.508Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-26T15:02:49.933Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-26T14:30:22.330Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-26T14:28:55.785Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-26T14:26:19.381Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-26T14:22:27.628Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-26T14:17:32.768Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-26T14:16:32.677Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-26T14:15:29.516Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-25T20:18:41.116Z",
+    "ip": "192.168.0.10",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-25T16:17:03.026Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-25T16:12:45.892Z",
+    "ip": "127.0.0.1",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-25T15:53:14.486Z",
+    "ip": "192.168.0.34",
+    "ciudad": "Red local"
+  },
+  {
+    "fecha": "2026-05-04T14:11:32.628Z",
+    "ip": "191.156.1.50",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-30T11:30:20.077Z",
+    "ip": "191.156.92.61",
+    "ciudad": "Barranquilla, Atlántico, Colombia"
+  },
+  {
+    "fecha": "2026-04-29T00:02:54.956Z",
+    "ip": "191.156.247.252",
+    "ciudad": "Barranquilla, Atlántico, Colombia"
+  },
+  {
+    "fecha": "2026-04-28T19:09:01.910Z",
+    "ip": "191.95.32.102",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-28T15:23:23.295Z",
+    "ip": "38.252.157.97",
+    "ciudad": "San Pedro, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-28T13:57:16.538Z",
+    "ip": "38.252.157.97",
+    "ciudad": "San Pedro, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-24T11:25:54.814Z",
+    "ip": "191.156.32.33",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-24T00:06:14.154Z",
+    "ip": "191.95.21.27",
+    "ciudad": "Barranquilla, Atlántico, Colombia"
+  },
+  {
+    "fecha": "2026-04-23T11:37:21.322Z",
+    "ip": "191.156.252.235",
+    "ciudad": "Barranquilla, Atlántico, Colombia"
+  },
+  {
+    "fecha": "2026-04-22T13:40:04.537Z",
+    "ip": "191.156.4.127",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-22T13:38:22.348Z",
+    "ip": "191.156.4.127",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-22T11:26:02.837Z",
+    "ip": "191.156.251.95",
+    "ciudad": "Barranquilla, Atlántico, Colombia"
+  },
+  {
+    "fecha": "2026-04-22T11:18:11.340Z",
+    "ip": "191.156.251.95",
+    "ciudad": "Barranquilla, Atlántico, Colombia"
+  },
+  {
+    "fecha": "2026-04-21T22:28:11.640Z",
+    "ip": "191.156.38.37",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-21T14:06:08.562Z",
+    "ip": "191.156.38.180",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-19T03:50:50.581Z",
+    "ip": "206.62.143.179",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-17T17:05:21.156Z",
+    "ip": "181.51.32.47",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  },
+  {
+    "fecha": "2026-04-17T13:24:14.298Z",
+    "ip": "191.156.254.81",
+    "ciudad": "Barranquilla, Atlántico, Colombia"
+  },
+  {
+    "fecha": "2026-04-15T18:23:57.552Z",
+    "ip": "181.205.147.42",
+    "ciudad": "Medellín, Antioquia, Colombia"
+  }
+]

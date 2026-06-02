@@ -1,0 +1,22 @@
+services:
+  luxora-gems:
+    build: ./backend
+    container_name: luxora-gems
+    ports:
+      - "3000:3000"
+    network_mode: host
+    volumes:
+      - ./productos.json:/data/productos.json
+      - ./claves.json:/data/claves.json
+      - ./destacados.json:/data/destacados.json
+      - ./nuevos.json:/data/nuevos.json
+      - ./contactos.json:/data/contactos.json
+      - ./manifiestos.json:/data/manifiestos.json
+      - ./manifiestos:/data/manifiestos
+      - ./imagenes:/data/imagenes
+      - ./imagenes_cache:/data/imagenes_cache
+      - ./frontend:/data/frontend
+      - ./ubicaciones_vendedor.json:/data/ubicaciones_vendedor.json
+      - ./existencias.json:/data/existencias.json
+      - ./agotados:/data/agotados
+    restart: unless-stopped

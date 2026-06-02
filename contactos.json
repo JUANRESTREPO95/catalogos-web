@@ -1,0 +1,21 @@
+{
+  "introduccion": "Gracias por visitar Luxora Gems.\nSomos especialistas en joyería y accesorios exclusivos. Estamos disponibles para brindarte información, resolver tus dudas y ayudarte con tus pedidos.",
+  "contactos": [
+    {
+      "descripcion": "PEDIDOS",
+      "telefono": "3226717282"
+    },
+    {
+      "descripcion": "CARTERA",
+      "telefono": "3226109780"
+    },
+    {
+      "descripcion": "ROBERTO (VENDEDOR COSTA)",
+      "telefono": "3102628063"
+    },
+    {
+      "descripcion": "LAZARO (VENDEDOR ANTIOQUIA)",
+      "telefono": "3102628012"
+    }
+  ]
+}

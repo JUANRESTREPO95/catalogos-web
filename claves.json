@@ -1,0 +1,10 @@
+{
+  "admin": "Megaa",
+  "vendedor": "123",
+  "usuario": "Megau",
+  "api_existencias": "Ja",
+  "admin2FA": {
+    "enabled": false,
+    "secret": "IAZTOZJGFRAESN25JZXWIUCFH4YS6LTXLZHG6RZKPVQTEVDQLJLQ"
+  }
+}

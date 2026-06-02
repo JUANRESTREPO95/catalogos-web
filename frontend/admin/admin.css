@@ -1,0 +1,616 @@
+:root {
+  --primary: #e91e63;
+  --primary-dark: #c2185b;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  background: #f5f5f5;
+  font-family: 'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--gray-800);
+  min-height: 100vh;
+  max-width: 100%;
+}
+
+.field-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+.field-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.field-error {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--gray-300);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-outline:hover {
+  border-color: var(--gray-400);
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.login-full {
+  max-width: 400px;
+  margin: 100px auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  padding: 40px;
+  text-align: center;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: var(--gray-900);
+}
+
+.login-subtitle {
+  color: var(--gray-500);
+  margin-bottom: 20px;
+}
+
+.admin-full {
+  max-width: 1100px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  padding: 24px;
+}
+
+.admin-title {
+  font-size: 1.8rem;
+  color: var(--gray-900);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#loginModal.is-visible { display: block; }
+#adminModal.is-hidden { display: none; }
+#card2FA { display: none; }
+
+.admin-topbar {
+  background: #1a1a2e;
+  padding: 14px;
+  text-align: center;
+}
+
+.admin-topbar-title {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.sidebar-spacer { flex: 1; }
+
+.empresa-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.empresa-header-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.btn-block { width: 100%; }
+
+.twofa-status { margin-bottom: 10px; font-size: 0.9rem; }
+.twofa-msg { margin-top: 8px; }
+
+.twofa-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.twofa-modal-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.twofa-title { margin: 0 0 20px; }
+.twofa-subtitle { font-size: 13px; color: #666; margin-bottom: 15px; }
+.twofa-qr { max-width: 250px; margin-bottom: 15px; }
+.twofa-help { font-size: 11px; color: #888; margin-bottom: 10px; }
+
+.twofa-secret {
+  background: #f3f4f6;
+  padding: 8px;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 20px;
+  word-break: break-all;
+  font-size: 12px;
+}
+
+.twofa-input {
+  padding: 12px;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.twofa-btn { padding: 12px 24px; }
+.twofa-btn-cancel { margin-left: 10px; }
+.twofa-result { margin-top: 15px; font-size: 14px; }
+
+.cartera-filters-inline { display: flex; flex-wrap: wrap; gap: 8px; }
+.cartera-filter-item { flex: 1; min-width: 120px; }
+.cartera-filter-btn { padding: 8px 12px; font-size: 0.8rem; }
+
+.cartera-charts-wrap { display: none; margin-top: 24px; }
+.cartera-chart-card { background: #f9fafb; border-radius: 12px; padding: 20px; }
+.cartera-chart-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.cartera-chart-scroll {
+  width: 100%;
+  max-height: 500px;
+  overflow-x: auto;
+  overflow-y: auto;
+  display: flex;
+  justify-content: flex-start;
+}
+.cartera-chart-scroll svg { display: block; margin: 0; }
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--gray-200);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-tab {
+  padding: 10px 18px;
+  border: none;
+  background: var(--gray-100);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.admin-tab:hover {
+  background: var(--gray-200);
+}
+.admin-tab.active {
+  background: var(--primary);
+  color: white;
+}
+
+.admin-section {
+  display: none;
+}
+.admin-section.active {
+  display: block;
+}
+
+.upload-box {
+  border: 2px dashed var(--gray-300);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.upload-box:hover {
+  border-color: var(--primary);
+  background: #fafafa;
+}
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.upload-result {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+}
+.upload-result.success {
+  background: #d4edda;
+  color: #155724;
+}
+.upload-result.error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.admin-table th,
+.admin-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--gray-200);
+}
+.admin-table th {
+  background: var(--gray-50);
+  color: var(--gray-800);
+  font-weight: 600;
+}
+.admin-table tr:hover {
+  background: var(--gray-50);
+}
+
+#carteraTable th,
+#carteraTable td {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#carteraTable th.cartera-col-fecha,
+#carteraTable td.cartera-col-fecha { max-width: 70px !important; }
+#carteraTable th.cartera-col-factura,
+#carteraTable td.cartera-col-factura { max-width: 90px !important; }
+#carteraTable th.cartera-col-vendedor,
+#carteraTable td.cartera-col-vendedor { max-width: 100px !important; }
+#carteraTable th.cartera-col-ciudad,
+#carteraTable td.cartera-col-ciudad { max-width: 80px !important; }
+#carteraTable th.cartera-col-monto,
+#carteraTable td.cartera-col-monto { max-width: 90px !important; text-align: right !important; }
+#carteraTable th.cartera-col-cliente,
+#carteraTable td.cartera-col-cliente { max-width: 200px !important; }
+#carteraTable th.cartera-col-dias,
+#carteraTable td.cartera-col-dias { max-width: 40px !important; text-align: center !important; }
+#carteraTable th.cartera-col-saldo,
+#carteraTable td.cartera-col-saldo { max-width: 90px !important; text-align: right !important; }
+
+.destacados-subtabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.destacados-subtab {
+  padding: 8px 16px;
+  border: 1px solid var(--gray-300);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.destacados-subtab.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.destacados-subtab-content {
+  display: none;
+}
+.destacados-subtab-content.active {
+  display: block;
+}
+
+.numeros-intro-wrap {
+  margin-bottom: 24px;
+}
+
+.clave-titulo {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: var(--gray-800);
+}
+
+.clave-desc {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  margin-bottom: 12px;
+}
+
+.claves-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.clave-card {
+  background: var(--gray-50);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.form-contacto {
+  display: none;
+  background: #f9f9f9;
+  border: 1px solid var(--gray-200);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.btn-action-delete {
+  color: #dc3545;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+}
+.btn-action-delete:hover {
+  text-decoration: underline;
+}
+
+.btn-action-edit {
+  color: var(--primary);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+  margin-right: 10px;
+}
+.btn-action-edit:hover {
+  text-decoration: underline;
+}
+
+/* Cartera chart container */
+#carteraCharts > div {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .admin-full {
+    margin: 10px;
+    padding: 16px;
+  }
+  .admin-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+  }
+  .admin-tab {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  .claves-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Mobile responsive for admin layout */
+  .admin-layout {
+    flex-direction: column;
+    max-width: 100vw;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .admin-content {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    padding: 12px;
+    padding-bottom: 70px;
+  }
+  .content-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .content-section {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  .cartera-filters {
+    max-width: 100%;
+  }
+  .admin-sidebar {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-top: 1px solid var(--gray-200);
+    background: white;
+  }
+  .sidebar-nav {
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 8px;
+    gap: 4px;
+  }
+  .sidebar-item {
+    padding: 10px 8px;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+  .sidebar-item span {
+    display: block;
+    font-size: 1.2rem;
+  }
+  .sidebar-logout {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+  }
+  /* Content tabs mobile */
+  .content-tabs {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .content-tab {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  /* Cartera mobile */
+  .cartera-filters {
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
+  }
+  .cartera-select {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px 8px;
+    box-sizing: border-box;
+  }
+  .cartera-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .cartera-card {
+    padding: 10px 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow: hidden;
+  }
+
+  /* Tables mobile */
+  .admin-table {
+    font-size: 0.75rem;
+  }
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 6px;
+  }
+
+  /* Login mobile */
+  .login-full {
+    margin: 20px 12px;
+    padding: 24px 16px;
+  }
+  .login-title {
+    font-size: 1.3rem;
+  }
+
+  /* Grid mobile */
+  .claves-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Cartera mobile fixes */
+  .cartera-value {
+    font-size: 0.9rem;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+  .cartera-table-wrap {
+    margin: 0 -16px;
+    padding: 0 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .cartera-table-wrap table {
+    min-width: 700px;
+    width: 100%;
+  }
+  .cartera-table-wrap #carteraTable td.cartera-col-fecha { max-width: 65px !important; }
+  .cartera-table-wrap #carteraTable td.cartera-col-cliente { max-width: 150px !important; }
+  .cartera-table-wrap #carteraTable td.cartera-col-saldo { max-width: 75px !important; }
+
+  /* Force horizontal scroll for all tables */
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Table actions */
+  .admin-table td {
+    min-width: 0;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .admin-table input {
+    width: 100%;
+    min-width: 80px;
+  }
+}

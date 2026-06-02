@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Luxora Gems — Catálogo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+<!-- OVERLAY SIDEBAR -->
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="cerrarSidebar()"></div>
+
+<!-- SIDEBAR IZQUIERDO -->
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-title">Categorías</span>
+    <button class="sidebar-close" onclick="cerrarSidebar()">✕</button>
+  </div>
+  <nav id="sidebarNav" class="sidebar-nav">
+    <div class="sidebar-loader">Cargando...</div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-clear" onclick="limpiarFiltros()">Limpiar filtros</button>
+    <p style="margin-top:12px;font-size:0.68rem;color:#888;text-align:center;line-height:1.5">
+        © 2026 Desarrollado y producido por<br>
+        <a href="mailto:juanpablorestrepo95@gmail.com" style="color:#888;">juanpablorestrepo95@gmail.com</a>
+    </p>
+</div>
+</aside>
+
+<!-- HEADER -->
+<header id="mainHeader">
+  <div class="header-left">
+    <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="header-center">
+    <div class="header-logos">
+<img src="https://via.placeholder.com/200x60?text=BIGSTAR" alt="BigStar" class="header-logo logo-bigstar">
+       <img src="https://via.placeholder.com/200x60?text=LUXORA+GEMS" alt="Luxora Gems" class="header-logo logo-mega">
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="cart-icon" onclick="abrirCarrito()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span id="cartCount" class="cart-count">0</span>
+    </div>
+    <div class="user-menu-wrap">
+      <button class="user-btn" onclick="toggleUserMenu()" id="userMenuBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </button>
+      <div class="user-dropdown" id="userDropdown">
+        <button onclick="abrirLoginVendedor(); cerrarUserMenu()" id="btnVendedor">Vendedor</button>
+        <button onclick="window.location.href='/admin/'">Admin</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- BARRA DE BÚSQUEDA -->
+<div class="search-hero">
+  <div class="search-row">
+    <div class="search-wrap">
+      <svg class="search-icon-svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" class="search-input"
+        placeholder="Buscar por referencia, nombre, categoría..."
+        oninput="buscarProductos(this.value)" autocomplete="off">
+      <button class="search-clear" id="searchClear" onclick="limpiarBusqueda()" style="display:none">✕</button>
+    </div>
+    <div class="orden-wrap">
+      <button class="orden-btn" id="ordenBtn" onclick="toggleOrdenPanel()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/>
+        </svg>
+        ORDENAR
+        <span class="orden-badge" id="ordenBadge" style="display:none">●</span>
+      </button>
+      <div class="orden-panel" id="ordenPanel">
+        <div class="orden-panel-header">Ordenar y filtrar precio</div>
+        <div class="orden-opciones">
+          <button class="orden-opcion" id="opcionAsc" onclick="setOrden('asc')">
+            <span class="orden-check">✓</span>
+            Precio: menor a mayor
+          </button>
+          <button class="orden-opcion" id="opcionDesc" onclick="setOrden('desc')">
+            <span class="orden-check">✓</span>
+            Precio: mayor a menor
+          </button>
+          <button class="orden-opcion selected" id="opcionNone" onclick="setOrden('')">
+            <span class="orden-check">✓</span>
+            Sin ordenar
+          </button>
+        </div>
+        <div class="orden-divider"></div>
+        <div class="orden-precios">
+          <p class="orden-label">Rango de precio</p>
+          <div class="orden-precios-inputs">
+            <div class="orden-precio-field">
+              <label>Mínimo</label>
+              <input type="number" id="precioMin" class="orden-input" placeholder="$ 0" min="0" oninput="aplicarOrdenYFiltro()">
+            </div>
+            <div class="orden-precio-sep">—</div>
+            <div class="orden-precio-field">
+              <label>Máximo</label>
+              <input type="number" id="precioMax" class="orden-input" placeholder="Sin límite" min="0" oninput="aplicarOrdenYFiltro()">
+            </div>
+          </div>
+        </div>
+        <button class="orden-limpiar" onclick="limpiarOrden()">Limpiar orden y precios</button>
+      </div>
+    </div>
+  </div>
+  <div id="filtroActivo" class="filtro-activo-badge" style="display:none"></div>
+</div>
+
+<!-- CONTENIDO -->
+<main class="main-content">
+  <div id="contador" class="contador"></div>
+  <div id="loading" class="loading-wrap">
+    <div class="spinner"></div>
+    <p>Cargando catálogo...</p>
+  </div>
+  <div id="productos" class="productos-grid"></div>
+  <div id="sentinel"></div>
+  <div id="emptyState" class="empty-state" style="display:none">
+    <p>No se encontraron productos</p>
+    <button class="btn-outline" onclick="limpiarBusqueda(); limpiarFiltros()">Ver todos</button>
+  </div>
+</main>
+
+<!-- BOTÓN FLOTANTE PDF -->
+<button id="btnPDFFlotante" class="btn-pdf-flotante" onclick="generarPDFCatalogo()" style="display:none">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+  PDF Catálogo
+</button>
+
+<!-- BOTÓN FLOTANTE DESCARGAR FOTOS -->
+<button id="btnDescargarFotos" class="btn-pdf-flotante" onclick="descargarFotosFiltradas()" style="display:none; bottom: 88px;">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  Descargar Fotos
+</button>
+
+<!-- BOTÓN FLOTANTE CONTACTO -->
+<button id="btnContacto" class="btn-contacto-flotante" onclick="abrirContacto()">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+  </svg>
+  Contáctanos
+</button>
+
+<!-- MODAL IMAGEN -->
+<div id="imageModal" class="modal" onclick="cerrarSiOverlay(event,'imageModal')">
+  <span class="modal-close" onclick="cerrar('imageModal')">✕</span>
+  <button id="modalPrev" class="modal-nav modal-nav-left" onclick="navegarModal(-1)">&#8249;</button>
+  <div class="modal-content image-modal-content">
+    <div class="image-modal-img-wrap">
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modal-info">
+      <p id="modalRef" class="modal-ref"></p>
+      <h2 id="modalNombre"></h2>
+      <div class="modal-tags">
+        <span class="tag tag-cat" id="modalCat"></span>
+        <span class="tag tag-sub" id="modalSub"></span>
+      </div>
+      <div class="modal-precio" id="modalPrecio"></div>
+      <div class="modal-existencia" id="modalExistencia"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button class="btn-primary" onclick="cerrar('imageModal'); abrirQty(productoActual, true)">Añadir al carrito</button>
+        <button id="btnManifiesto" class="btn-manifiesto" onclick="descargarManifiesto(productoActual)" style="display:none" title="Descargar manifiesto">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+          Manifiesto
+        </button>
+      </div>
+    </div>
+  </div>
+  <button id="modalNext" class="modal-nav modal-nav-right" onclick="navegarModal(1)">&#8250;</button>
+</div>
+
+<!-- MODAL CANTIDAD -->
+<div id="qtyModal" class="modal" onclick="cerrarSiOverlay(event,'qtyModal')">
+  <span class="modal-close" onclick="cerrar('qtyModal')">✕</span>
+  <div class="modal-box qty-box">
+    <img id="qtyImg" src="" alt="">
+    <div id="qtyNombre" class="qty-nombre"></div>
+    <div id="qtyPrecio" class="qty-precio"></div>
+    <div class="qty-controls">
+      <button class="qty-btn" onclick="cambiarQty(-1)">−</button>
+      <input type="number" id="qtyInput" value="1" min="1">
+      <button class="qty-btn" onclick="cambiarQty(1)">+</button>
+    </div>
+    <button class="btn-primary" style="width:100%" onclick="confirmarQty()">Añadir al carrito</button>
+  </div>
+</div>
+
+<!-- MODAL CARRITO -->
+<div id="cartModal" class="modal" onclick="cerrarSiOverlay(event,'cartModal')">
+  <span class="modal-close" onclick="cerrar('cartModal')">✕</span>
+  <div class="modal-box cart-box">
+    <h2 class="modal-title">Carrito</h2>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotal">Total: $0</div>
+    <div class="cart-actions">
+      <button class="btn-outline" onclick="vaciarCarrito()">Vaciar carrito</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONTACTO -->
+<div id="contactoModal" class="modal" onclick="cerrarSiOverlay(event,'contactoModal')">
+  <span class="modal-close" onclick="cerrar('contactoModal')">✕</span>
+  <div class="modal-box contacto-box">
+    <h2 class="modal-title">Contáctanos</h2>
+    <div id="contactoIntro" class="contacto-intro"></div>
+    <div id="contactoLista" class="contacto-lista"></div>
+  </div>
+</div>
+
+<!-- MODAL LOGIN ADMIN -->
+<div id="loginModal" class="modal" onclick="cerrarSiOverlay(event,'loginModal')">
+  <span class="modal-close" onclick="cerrar('loginModal')">✕</span>
+  <div class="modal-box login-box">
+    <h2 class="modal-title">Panel Admin</h2>
+    <p class="modal-subtitle">Ingresa la contraseña para continuar</p>
+    <input type="password" id="loginInput" class="field-input" placeholder="Contraseña"
+      onkeydown="if(event.key==='Enter') verificarLogin()">
+    <div id="loginError" class="field-error"></div>
+    <button class="btn-primary" style="width:100%" onclick="verificarLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- MODAL LOGIN VENDEDOR -->
+<div id="loginVendedorModal" class="modal" onclick="cerrarSiOverlay(event,'loginVendedorModal')">
+  <span class="modal-close" onclick="cerrar('loginVendedorModal')">✕</span>
+  <div class="modal-box login-box">
+    <h2 class="modal-title">Acceso Vendedor</h2>
+    <p class="modal-subtitle">Ingresa tu contraseña para descargar el catálogo PDF</p>
+    <input type="password" id="loginVendedorInput" class="field-input" placeholder="Contraseña"
+      onkeydown="if(event.key==='Enter') verificarLoginVendedor()">
+    <div id="loginVendedorError" class="field-error"></div>
+    <button class="btn-primary" style="width:100%" onclick="verificarLoginVendedor()">Entrar</button>
+  </div>
+</div>
+
+<!-- MODAL ADMIN -->
+<div id="adminModal" class="modal" onclick="cerrarSiOverlay(event,'adminModal')">
+  <span class="modal-close" onclick="cerrar('adminModal')">✕</span>
+  <div class="modal-box admin-box">
+    <h2 class="modal-title">Administración</h2>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('tabExcel',this)">Excel</button>
+      <button class="admin-tab" onclick="switchTab('tabLista',this)">Lista</button>
+      <button class="admin-tab" onclick="switchTab('tabClaves',this)">🔑 Contraseñas</button>
+      <button class="admin-tab" onclick="switchTab('tabDestacados',this); cargarTablaDestacados()">⭐ Destacados</button>
+      <button class="admin-tab" onclick="switchTab('tabNumeros',this); cargarTabNumeros()">📞 Números</button>
+      <button class="admin-tab" onclick="switchTab('tabManifiestos',this); cargarTablaManifiestos()">📄 Manifiestos</button>
+    </div>
+
+    <div id="tabExcel" class="admin-section active">
+      <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-icon">📂</div>
+        <strong>Haz clic para seleccionar tu archivo</strong>
+        <p>Excel (.xlsx) — Columnas: Ref | Nombre | Precio</p>
+        <p>Solo se importan productos que tengan imagen en la carpeta.</p>
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="subirArchivo(event)">
+      </div>
+      <div class="upload-result" id="uploadResult"></div>
+    </div>
+
+    <div id="tabLista" class="admin-section">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+        <button class="btn-danger" onclick="limpiarSinImagen()">🗑 Eliminar sin imagen</button>
+        <button id="btnLimpiarCache" class="btn-danger" onclick="limpiarCache()" style="margin-left:8px">🔄 Refrescar fotos</button>
+      </div>
+      <input class="field-input" type="text" id="adminSearch" placeholder="Buscar por referencia o nombre..."
+        oninput="filtrarTablaAdmin()" style="width:100%;margin-bottom:14px">
+      <table class="admin-table">
+        <thead><tr><th>Ref</th><th>Nombre</th><th>Precio</th><th>Categoría</th><th>Sub.</th><th>Acciones</th></tr></thead>
+        <tbody id="adminTabla"></tbody>
+      </table>
+    </div>
+
+    <div id="tabClaves" class="admin-section">
+      <div class="claves-grid">
+        <div class="clave-card">
+          <h3 class="clave-titulo">🔒 Contraseña Admin</h3>
+          <p class="clave-desc">Acceso al panel de administración</p>
+          <input type="password" id="claveAdminNueva" class="field-input" placeholder="Nueva contraseña">
+          <input type="password" id="claveAdminConfirma" class="field-input" placeholder="Confirmar contraseña">
+          <div id="claveAdminMsg" class="field-error"></div>
+          <button class="btn-primary" style="width:100%" onclick="cambiarClave('admin','claveAdminNueva','claveAdminConfirma','claveAdminMsg')">
+            Cambiar contraseña admin
+          </button>
+        </div>
+        <div class="clave-card">
+          <h3 class="clave-titulo">🏷 Contraseña Vendedor</h3>
+          <p class="clave-desc">Acceso para descargar catálogo PDF</p>
+          <input type="password" id="claveVendedorNueva" class="field-input" placeholder="Nueva contraseña">
+          <input type="password" id="claveVendedorConfirma" class="field-input" placeholder="Confirmar contraseña">
+          <div id="claveVendedorMsg" class="field-error"></div>
+          <button class="btn-primary" style="width:100%" onclick="cambiarClave('vendedor','claveVendedorNueva','claveVendedorConfirma','claveVendedorMsg')">
+            Cambiar contraseña vendedor
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="tabDestacados" class="admin-section">
+      <div class="destacados-subtabs">
+        <button class="destacados-subtab active" onclick="switchSubtab('subtabMasVendidos', this); cargarTablaDestacados()">⭐ Más vendidos</button>
+        <button class="destacados-subtab" onclick="switchSubtab('subtabLoNuevo', this); cargarTablaLoNuevo()">🏷️ Lo Nuevo</button>
+      </div>
+      <div id="subtabMasVendidos" class="destacados-subtab-content active">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <p style="font-size:0.85rem;color:var(--gray-400);margin:0">Marca o sube un Excel con los <strong>más vendidos</strong>.</p>
+          <p style="font-size:0.78rem;color:var(--gray-400);margin-top:4px">Formato del Excel: <strong>A = Referencia</strong>. Fila 1 = encabezado (se ignora). ⚠️ Reemplaza la lista completa.</p>
+          <div>
+            <button id="btnImportarDestacados" class="btn-danger" onclick="document.getElementById('fileDestacados').click()">📂 Subir Excel</button>
+            <input type="file" id="fileDestacados" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarExcelDestacados(event)">
+          </div>
+        </div>
+        <input class="field-input" type="text" id="destacadosSearch" placeholder="Buscar por referencia o nombre..."
+          oninput="filtrarTablaDestacados()" style="width:100%;margin-bottom:14px">
+        <table class="admin-table">
+          <thead><tr><th>⭐</th><th>Ref</th><th>Nombre</th><th>Categoría</th></tr></thead>
+          <tbody id="destacadosTabla"></tbody>
+        </table>
+      </div>
+      <div id="subtabLoNuevo" class="destacados-subtab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <p style="font-size:0.85rem;color:var(--gray-400);margin:0">Marca o sube un Excel con <strong>lo nuevo</strong>.</p>
+          <p style="font-size:0.78rem;color:var(--gray-400);margin-top:4px">Formato del Excel: <strong>A = Referencia</strong>. Fila 1 = encabezado (se ignora). ⚠️ Reemplaza la lista completa.</p>
+          <div>
+            <button id="btnImportarNuevos" class="btn-danger" onclick="document.getElementById('fileNuevos').click()">📂 Subir Excel</button>
+            <input type="file" id="fileNuevos" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarExcelNuevos(event)">
+          </div>
+        </div>
+        <input class="field-input" type="text" id="nuevosSearch" placeholder="Buscar por referencia o nombre..."
+          oninput="filtrarTablaLoNuevo()" style="width:100%;margin-bottom:14px">
+        <table class="admin-table">
+          <thead><tr><th>🏷️</th><th>Ref</th><th>Nombre</th><th>Categoría</th></tr></thead>
+          <tbody id="nuevosTabla"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB NÚMEROS -->
+    <div id="tabNumeros" class="admin-section">
+      <div class="numeros-intro-wrap">
+        <h3 class="clave-titulo">📝 Introducción</h3>
+        <textarea id="numerosIntro" class="field-input" rows="3"
+          placeholder="Escribe una introducción para el modal de contacto..."
+          style="width:100%;resize:vertical;font-family:inherit"></textarea>
+        <button class="btn-primary" style="margin-top:8px" onclick="guardarIntroContacto()">Guardar introducción</button>
+        <div id="introMsg" class="field-error" style="margin-top:6px"></div>
+      </div>
+      <div style="margin-top:24px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h3 class="clave-titulo" style="margin:0">📞 Números de contacto</h3>
+          <button class="btn-primary" onclick="mostrarFormContacto()">+ Agregar</button>
+        </div>
+        <div id="formContacto" style="display:none;background:var(--gray-50,#f9f9f9);border:1px solid var(--gray-200);border-radius:6px;padding:16px;margin-bottom:14px">
+          <input type="hidden" id="contactoEditIdx" value="-1">
+          <input class="field-input" type="text" id="contactoDesc" placeholder="Descripción (ej: Ventas, Soporte...)" style="width:100%;margin-bottom:8px">
+          <input class="field-input" type="tel" id="contactoTel" placeholder="Número (ej: 3001234567)" style="width:100%;margin-bottom:8px">
+          <div style="display:flex;gap:8px">
+            <button class="btn-primary" style="flex:1" onclick="guardarContacto()">Guardar</button>
+            <button class="btn-outline" style="flex:1" onclick="cancelarFormContacto()">Cancelar</button>
+          </div>
+          <div id="contactoFormMsg" class="field-error" style="margin-top:6px"></div>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>Descripción</th><th>Teléfono</th><th>Acciones</th></tr></thead>
+          <tbody id="numerosTabla"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB MANIFIESTOS -->
+    <div id="tabManifiestos" class="admin-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div>
+          <p style="font-size:0.85rem;color:var(--gray-400);margin:0">Sube un Excel con encabezado: <strong>A = Referencia</strong> &nbsp;|&nbsp; <strong>B = Manifiesto</strong>.</p>
+          <p style="font-size:0.78rem;color:var(--gray-400);margin-top:4px">Solo se guardan referencias que existan en el catálogo. Sin duplicados.</p>
+          <p style="font-size:0.78rem;color:var(--gray-400);margin-top:4px">⚠️ La columna B debe incluir la extensión <strong>.pdf</strong> (ej: <em>manifiesto_ABC123.pdf</em>). Las referencias nuevas se anexan; si ya existían, se actualizan.</p>
+        </div>
+        <button id="btnImportarManifiestos" class="btn-danger" onclick="document.getElementById('fileManifiestos').click()">📂 Subir Excel</button>
+        <input type="file" id="fileManifiestos" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarExcelManifiestos(event)">
+      </div>
+      <div id="manifestosMsg" class="field-error" style="margin-bottom:10px"></div>
+      <input class="field-input" type="text" id="manifestosSearch" placeholder="Buscar por referencia o manifiesto..."
+        oninput="filtrarTablaManifiestos()" style="width:100%;margin-bottom:14px">
+      <table class="admin-table">
+        <thead><tr><th>Referencia</th><th>Manifiesto</th></tr></thead>
+        <tbody id="manifestosTabla"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
